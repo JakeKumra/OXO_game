@@ -38,25 +38,29 @@ public class OXOController {
             throw new CellAlreadyTakenException(rowIndex, colIndex);
         }
 
-
         int current_player = gameModel.getCurrentPlayerNumber();
-        gameModel.setCellOwner(rowIndex, colIndex, gameModel.getPlayerByNumber(current_player));
 
-        // check for a win if not check for a draw if not continue
-        if (hasWon(current_player)) {
-            System.out.println("We found a winner!");
-        } else {
-            if (isDraw()) {
-                System.out.println("There's been a draw.");
+        if (gameModel.getWinner() == null) {
+            gameModel.setCellOwner(rowIndex, colIndex, gameModel.getPlayerByNumber(current_player));
+            // update this to be more dynamic for additional players
+            if (gameModel.getCurrentPlayerNumber() == 0) {
+                gameModel.setCurrentPlayerNumber(1);
+            } else {
+                gameModel.setCurrentPlayerNumber(0);
+            }
+
+            // check for a win if not check for a draw if not continue
+            if (hasWon(current_player)) {
+                System.out.println("We found a winner!");
+            } else {
+                if (isDraw()) {
+                    System.out.println("There's been a draw.");
+                }
             }
         }
 
-        // update this to be more dynamic for additional players
-        if (gameModel.getCurrentPlayerNumber() == 0) {
-            gameModel.setCurrentPlayerNumber(1);
-        } else {
-            gameModel.setCurrentPlayerNumber(0);
-        }
+
+
     }
 
     // needs updating to be dynamic for additional players

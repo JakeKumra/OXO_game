@@ -253,6 +253,64 @@ class ExampleControllerTests {
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("z1"), failedTestComment);
   }
 
+  @Test
+  void OutsideCellRangeException2() throws OXOMoveException {
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `i1`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("i1"), failedTestComment);
+  }
+
+  @Test
+  void OutsideCellRangeException3() throws OXOMoveException {
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `h1`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("h1"), failedTestComment);
+  }
+
+  @Test
+  void OutsideCellRangeException4() throws OXOMoveException {
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `a4`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("a4"), failedTestComment);
+  }
+
+  @Test
+  void OutsideCellRangeException5() throws OXOMoveException {
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `a4`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("a0"), failedTestComment);
+  }
+
+  @Test
+  void OutsideCellRangeException6() throws OXOMoveException {
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `a4`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("a9"), failedTestComment);
+  }
+
+  @Test
+  void CellAlreadyTakenException() throws OXOMoveException {
+    sendCommandToController("a1"); // First player
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an CellAlreadyTakenException for command `a1`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(CellAlreadyTakenException.class, () -> sendCommandToController("a1"), failedTestComment);
+  }
+
+  @Test
+  void CellAlreadyTakenException2() throws OXOMoveException {
+    sendCommandToController("c3"); // First player
+    // Check that the controller throws a suitable exception when it gets an invalid command
+    String failedTestComment = "Controller failed to throw an CellAlreadyTakenException for command `c3`";
+    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
+    assertThrows(CellAlreadyTakenException.class, () -> sendCommandToController("c3"), failedTestComment);
+  }
+
 }
 
 
