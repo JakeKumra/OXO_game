@@ -56,9 +56,6 @@ public class OXOController {
                 }
             }
         }
-
-
-
     }
 
     // needs updating to be dynamic for additional players
@@ -189,16 +186,13 @@ public class OXOController {
         return false;
     }
 
-
     public void addRow() {
         if (gameModel.getNumberOfRows() < 9) {
-
             gameModel.addRow();
         }
     }
     public void removeRow() {
-        if (gameModel.getNumberOfRows() > 3) {
-
+        if (gameModel.getNumberOfRows() > 1) {
             gameModel.removeRow();
         }
     }
@@ -208,34 +202,29 @@ public class OXOController {
         }
     }
     public void removeColumn() {
-        if (gameModel.getNumberOfColumns() > 3) {
-            gameModel.removeColumn();
+        if (gameModel.getNumberOfColumns() > 1) {
+              gameModel.removeColumn();
         }
     }
     public void increaseWinThreshold() {
         int currentWinThreshold = gameModel.getWinThreshold();
         gameModel.setWinThreshold(++currentWinThreshold);
-        System.out.println(gameModel.getWinThreshold());
     }
     public void decreaseWinThreshold() {
         int currentWinThreshold = gameModel.getWinThreshold();
         if (currentWinThreshold > 3) {
             gameModel.setWinThreshold(--currentWinThreshold);
         }
-        System.out.println(gameModel.getWinThreshold());
     }
 
-    // reinitialise the game state to the original settings? does this count?
     public void reset() {
         for (int r=0; r<gameModel.getNumberOfRows(); r++) {
             for (int c=0; c<gameModel.getNumberOfColumns(); c++) {
                 gameModel.setCellOwner(r, c, null);
             }
         }
-       gameModel.setWinner(null);
+        gameModel.setWinner(null);
         gameModel.setCurrentPlayerNumber(0);
         gameModel.setGameDraw(false);
-
     }
-
 }

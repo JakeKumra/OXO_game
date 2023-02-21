@@ -16,7 +16,7 @@ class TestsForThreePlayers5x5 {
     // In order to test boards of different sizes, winning thresholds or number of players, create a separate test file (without this method in it !)
     @BeforeEach
     void setup() {
-        model = new OXOModel(5, 5, 3);
+        model = new OXOModel(5, 5, 4);
         model.addPlayer(new OXOPlayer('X'));
         model.addPlayer(new OXOPlayer('O'));
         model.addPlayer(new OXOPlayer('Z'));
@@ -99,10 +99,74 @@ class TestsForThreePlayers5x5 {
         sendCommandToController("c2"); // Second player
         sendCommandToController("c3"); // Third player
 
-        // a3, b3, c3 should be a win for the third player (since players alternate between moves)
-        // Let's check to see whether the first moving player is indeed the winner
+        sendCommandToController("d2"); // First player
+        sendCommandToController("d1"); // Second player
+        sendCommandToController("d3"); // Third player
+
+        // a3, b3, c3, c4 should be a win for the third player (since players alternate between moves)
         String failedTestComment = "Winner was expected to be " + thirdMovingPlayer.getPlayingLetter() + " but wasn't";
         assertEquals(thirdMovingPlayer, model.getWinner(), failedTestComment);
+    }
+
+    @Test
+    void testBasicWinHorizontal() throws OXOMoveException {
+        OXOPlayer firstMovingPlayer = model.getPlayerByNumber(model.getCurrentPlayerNumber());
+
+        sendCommandToController("c2"); // First player
+        sendCommandToController("a1"); // Second player
+        sendCommandToController("a2"); // Third player
+        sendCommandToController("c3"); // First player
+        sendCommandToController("a3"); // Second player
+        sendCommandToController("a4"); // Third player
+        sendCommandToController("c4"); // First player
+        sendCommandToController("a5"); // Second player
+        sendCommandToController("b1"); // Third player
+        sendCommandToController("c5"); // First player
+
+        // c2, c3, c4, c5 should be a win for the first player (since players alternate between moves)
+        String failedTestComment = "Winner was expected to be " + firstMovingPlayer.getPlayingLetter() + " but wasn't";
+        assertEquals(firstMovingPlayer, model.getWinner(), failedTestComment);
+    }
+
+    @Test
+    void testBasicWinDiagonalLeftToRight() throws OXOMoveException {
+
+        OXOPlayer firstMovingPlayer = model.getPlayerByNumber(model.getCurrentPlayerNumber());
+
+        sendCommandToController("a1"); // First player
+        sendCommandToController("a2"); // Second player
+        sendCommandToController("a3"); // Third player
+        sendCommandToController("b2"); // First player
+        sendCommandToController("e1"); // Second player
+        sendCommandToController("e2"); // Third player
+        sendCommandToController("c3"); // First player
+        sendCommandToController("e3"); // Second player
+        sendCommandToController("e4"); // Third player
+        sendCommandToController("d4"); // First player
+
+        // a1, b2, c3, d4 should be a win for the first player
+        String failedTestComment = "Winner was expected to be " + firstMovingPlayer.getPlayingLetter() + " but wasn't";
+        assertEquals(firstMovingPlayer, model.getWinner(), failedTestComment);
+    }
+
+    @Test
+    void testBasicWinDiagonalRightToLeft() throws OXOMoveException {
+
+        OXOPlayer firstMovingPlayer = model.getPlayerByNumber(model.getCurrentPlayerNumber());
+
+        sendCommandToController("b5"); // First player
+        sendCommandToController("a1"); // Second player
+        sendCommandToController("a2"); // Third player
+        sendCommandToController("c4"); // First player
+        sendCommandToController("b2"); // Second player
+        sendCommandToController("b1"); // Third player
+        sendCommandToController("d3"); // First player
+        sendCommandToController("c1"); // Second player
+        sendCommandToController("c2"); // Third player
+        sendCommandToController("e2"); // First player
+
+        String failedTestComment = "Winner was expected to be " + firstMovingPlayer.getPlayingLetter() + " but wasn't";
+        assertEquals(firstMovingPlayer, model.getWinner(), failedTestComment);
     }
 }
 

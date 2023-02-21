@@ -4,9 +4,7 @@ import java.util.ArrayList;
 public class OXOModel {
 
     private ArrayList< ArrayList<OXOPlayer> > cells;
-    // ArrayList<OXOPlayer> cells = new ArrayList<>(Arrays.asList(null));
 
-//    private OXOPlayer[] players;
     private ArrayList<OXOPlayer> players;
 
     private int currentPlayerNumber;
@@ -27,7 +25,6 @@ public class OXOModel {
             }
             cells.add(row);
         }
-        // instantiates two new players inside the players ArrayList
         players = new ArrayList<OXOPlayer>(2);
     }
 
@@ -42,14 +39,12 @@ public class OXOModel {
         return players.size();
     }
 
-    // update this so that we can add additional players inside the test scripts
     public void addPlayer(OXOPlayer player) {
         players.add(player);
     }
 
     public OXOPlayer getPlayerByNumber(int number) {
         return players.get(number);
-//        return players[number];
     }
 
     public OXOPlayer getWinner() {
@@ -57,7 +52,7 @@ public class OXOModel {
     }
 
     public void setWinner(OXOPlayer player) {
-        winner = player;
+        this.winner = player;
     }
 
     public int getCurrentPlayerNumber() {
@@ -65,7 +60,7 @@ public class OXOModel {
     }
 
     public void setCurrentPlayerNumber(int playerNumber) {
-        currentPlayerNumber = playerNumber;
+        this.currentPlayerNumber = playerNumber;
     }
 
     public int getNumberOfRows() {
@@ -85,7 +80,7 @@ public class OXOModel {
     }
 
     public void setCellOwner(int rowNumber, int colNumber, OXOPlayer player) {
-        cells.get(rowNumber).set(colNumber, player);
+        this.cells.get(rowNumber).set(colNumber, player);
     }
 
     public void addColumn() {
@@ -105,20 +100,39 @@ public class OXOModel {
     }
 
     public void removeRow() {
-        // should this allow players to remove columns / rows if it's occupied? NO IT SHOULDN'T
         if (!cells.isEmpty()) {
             int numRows = cells.size();
-            cells.remove(numRows-1);
+            boolean cellOccupied = false;
+            int numCols = cells.get(0).size();
+            for (int i=0; i<numCols; i++) {
+                if (cells.get(cells.size()-1).get(i) != null) {
+                    cellOccupied = true;
+                    break;
+                }
+            }
+            if (cellOccupied == false && cells.size() > 1) {
+                cells.remove(numRows-1);
+            }
         }
     }
 
 
     public void removeColumn() {
-        // should this allow players to remove columns / rows if it's occupied? NO IT SHOULD
-        if (!cells.get(0).isEmpty()) {
+
+        if (!cells.isEmpty()) {
             int numRows = cells.size();
+            int numCols = cells.get(0).size();
+            boolean cellOccupied = false;
             for (int i=0; i<numRows; i++) {
-                cells.get(i).remove(cells.get(i).size() -1);
+                if (cells.get(i).get(numCols - 1) != null) {
+                    cellOccupied = true;
+                    break;
+                }
+            }
+            if (cellOccupied == false && cells.get(0).size() > 1) {
+                for (int i=0; i<numRows; i++) {
+                    cells.get(i).remove(cells.get(i).size() -1);
+                }
             }
         }
     }
@@ -136,7 +150,7 @@ public class OXOModel {
     }
 
     public void setGameDraw(boolean drawStatus) {
-        gameDrawn = drawStatus;
+        this.gameDrawn = drawStatus;
     }
 
 }
