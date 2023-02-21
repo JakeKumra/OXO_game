@@ -162,6 +162,7 @@ class ExampleControllerTests {
   @Test
   void testResetGame() throws OXOMoveException {
     // test the game resets correctly
+    // call the RESET METHOD DIRECTLY
   }
 
   // Example of how to test for the throwing of exceptions
