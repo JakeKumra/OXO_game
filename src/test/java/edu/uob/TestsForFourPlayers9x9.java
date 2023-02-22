@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.Duration;
 
-class TestsForFourPlayers6x6 {
+class TestsForFourPlayers9x9 {
     private OXOModel model;
     private OXOController controller;
 
@@ -16,7 +16,7 @@ class TestsForFourPlayers6x6 {
     // In order to test boards of different sizes, winning thresholds or number of players, create a separate test file (without this method in it !)
     @BeforeEach
     void setup() {
-        model = new OXOModel(6, 6, 4);
+        model = new OXOModel(9, 9, 4);
         model.addPlayer(new OXOPlayer('X'));
         model.addPlayer(new OXOPlayer('O'));
         model.addPlayer(new OXOPlayer('A'));

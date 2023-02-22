@@ -177,13 +177,11 @@ public class OXOController {
         }
     }
     public void increaseWinThreshold() {
-        if (!gameModel.getGameStarted()) {
-            int currentWinThreshold = gameModel.getWinThreshold();
-            gameModel.setWinThreshold(++currentWinThreshold);
-        }
+        int currentWinThreshold = gameModel.getWinThreshold();
+        gameModel.setWinThreshold(++currentWinThreshold);
     }
     public void decreaseWinThreshold() {
-        if (!gameModel.getGameStarted()) {
+        if (!gameModel.getGameStarted() || gameModel.getWinner() != null) {
             int currentWinThreshold = gameModel.getWinThreshold();
             if (currentWinThreshold > 3) {
                 gameModel.setWinThreshold(--currentWinThreshold);
