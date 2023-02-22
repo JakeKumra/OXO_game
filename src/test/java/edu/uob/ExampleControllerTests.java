@@ -1,12 +1,11 @@
 package edu.uob;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import edu.uob.OXOMoveException.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ExampleControllerTests {
   private OXOModel model;
@@ -24,7 +23,7 @@ class ExampleControllerTests {
 
   // This next method is a utility function that can be used by any of the test methods to _safely_ send a command to the controller
   void sendCommandToController(String command) {
-    // Try to send a command to the server - call will timeout if it takes too long (in case the server enters an infinite loop)
+    // Try to send a command to the server - call will time out if it takes too long (in case the server enters an infinite loop)
     // Note: this is ugly code and includes syntax that you haven't encountered yet
     String timeoutComment = "Controller took too long to respond (probably stuck in an infinite loop)";
     assertTimeoutPreemptively(Duration.ofMillis(1000), () -> controller.handleIncomingCommand(command), timeoutComment);
@@ -114,6 +113,27 @@ class ExampleControllerTests {
     assertEquals(secondMovingPlayer, model.getWinner(), failedTestComment);
   }
 
+  @Test
+  void testWinWithHigherWinningThreshold() throws OXOMoveException {
+    // Set up model with higher winning threshold (4)
+    model = new OXOModel(4, 4, 4);
+    model.addPlayer(new OXOPlayer('X'));
+    model.addPlayer(new OXOPlayer('O'));
+    controller = new OXOController(model);
+
+    OXOPlayer firstMovingPlayer = model.getPlayerByNumber(model.getCurrentPlayerNumber());
+
+    sendCommandToController("a1"); // First player
+    sendCommandToController("b1"); // Second player
+    sendCommandToController("a2"); // First player
+    sendCommandToController("b2"); // Second player
+    sendCommandToController("a3"); // First player
+    sendCommandToController("b3"); // Second player
+    sendCommandToController("a4"); // First player
+
+    String failedTestComment = "Winner was expected to be " + firstMovingPlayer.getPlayingLetter() + " but wasn't";
+    assertEquals(firstMovingPlayer, model.getWinner(), failedTestComment);
+  }
 
   @Test
   void testTieGame() throws OXOMoveException {
@@ -129,7 +149,7 @@ class ExampleControllerTests {
     sendCommandToController("c3"); // First player
 
     String failedTestComment = "Was expecting a draw so winner should be null";
-    assertEquals(model.getWinner(), null, failedTestComment);
+    assertNull(model.getWinner(), failedTestComment);
   }
 
   @Test
@@ -145,7 +165,23 @@ class ExampleControllerTests {
     sendCommandToController("c3"); // First player
 
     String failedTestComment = "Was expecting a draw so winner should be null";
-    assertEquals(model.getWinner(), null, failedTestComment);
+    assertNull(model.getWinner(), failedTestComment);
+  }
+
+  @Test
+  void testTieGame3() throws OXOMoveException {
+    sendCommandToController("a1"); // player 1
+    sendCommandToController("b1"); // player 2
+    sendCommandToController("a2"); // player 1
+    sendCommandToController("b2"); // player 2
+    sendCommandToController("c1"); // player 1
+    sendCommandToController("a3"); // player 2
+    sendCommandToController("b3"); // player 1
+    sendCommandToController("c3"); // player 2
+    sendCommandToController("c2"); // player 1
+
+    String failedTestComment = "Game should end in a draw but didn't";
+    assertNull(model.getWinner(), failedTestComment);
   }
 
   @Test
@@ -200,6 +236,11 @@ class ExampleControllerTests {
   void InvalidIdentifierCharacterException6() throws OXOMoveException {
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command `a `";
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController("a "), failedTestComment);
+  }
+
+  @Test
+  void testInvalidMove() {
+    assertThrows(OXOMoveException.class, () -> sendCommandToController("a4"), "Move to cell a4 should throw OXOMoveException");
   }
 
   @Test
@@ -269,7 +310,7 @@ class ExampleControllerTests {
     sendCommandToController("c1"); // Second player
 
     String failedTestComment = "c1 should not be occupied by second player after game was won`";
-    assertEquals(controller.gameModel.getCellOwner(2, 0), null, failedTestComment);
+    assertNull(controller.gameModel.getCellOwner(2, 0), failedTestComment);
   }
 
   @Test
@@ -280,9 +321,17 @@ class ExampleControllerTests {
     sendCommandToController("a2"); // First player
     sendCommandToController("b2"); // Second player
 
-    // check the draw, win, states here.
-    // then call reset method
-    // then check again that they were reset correctly
+    controller.reset();
+
+    assertNull(controller.gameModel.getCellOwner(0, 0), "Position a1 should be null after reset");
+    assertNull(controller.gameModel.getCellOwner(1, 0), "Position b1 should be null after reset");
+    assertNull(controller.gameModel.getCellOwner(0, 1), "Position a2 should be null after reset");
+    assertNull(controller.gameModel.getCellOwner(1, 1), "Position b2 should be null after reset");
+
+    assertEquals(controller.gameModel.getPlayerByNumber(0),
+            controller.gameModel.getPlayerByNumber(controller.gameModel.getCurrentPlayerNumber()),
+            "Current player should be set to first player after reset function is called"
+            );
   }
   @Test
   void testResetPostWin() throws OXOMoveException {
@@ -291,12 +340,14 @@ class ExampleControllerTests {
     sendCommandToController("b1"); // Second player
     sendCommandToController("a2"); // First player
     sendCommandToController("b2"); // Second player
+    sendCommandToController("a3"); // First player
 
-    // test the game resets correctly
-    // call the RESET METHOD DIRECTLY
+    OXOPlayer winningPlayer = controller.gameModel.getWinner();
+
+    controller.reset();
+    assertNotEquals(winningPlayer, controller.gameModel.getWinner(), "Failed to reset winner");
+    assertNull(controller.gameModel.getWinner(), "Failed to reset winner to null");
   }
-
-
 }
 
 

@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class OXOModel {
 
-    private ArrayList< ArrayList<OXOPlayer> > cells;
+    private final ArrayList< ArrayList<OXOPlayer> > cells;
 
-    private ArrayList<OXOPlayer> players;
+    private final ArrayList<OXOPlayer> players;
 
     private int currentPlayerNumber;
 
@@ -14,6 +14,8 @@ public class OXOModel {
     private boolean gameDrawn;
 
     private int winThreshold;
+
+    private boolean gameStarted;
 
     public OXOModel(int numberOfRows, int numberOfColumns, int winThresh) {
         winThreshold = winThresh;
@@ -25,7 +27,7 @@ public class OXOModel {
             }
             cells.add(row);
         }
-        players = new ArrayList<OXOPlayer>(2);
+        players = new ArrayList<>(2);
     }
 
     public OXOPlayer getPlayerByIndex (int indexNum) {
@@ -52,7 +54,7 @@ public class OXOModel {
     }
 
     public void setWinner(OXOPlayer player) {
-        this.winner = player;
+        winner = player;
     }
 
     public int getCurrentPlayerNumber() {
@@ -60,7 +62,7 @@ public class OXOModel {
     }
 
     public void setCurrentPlayerNumber(int playerNumber) {
-        this.currentPlayerNumber = playerNumber;
+        currentPlayerNumber = playerNumber;
     }
 
     public int getNumberOfRows() {
@@ -80,7 +82,7 @@ public class OXOModel {
     }
 
     public void setCellOwner(int rowNumber, int colNumber, OXOPlayer player) {
-        this.cells.get(rowNumber).set(colNumber, player);
+        cells.get(rowNumber).set(colNumber, player);
     }
 
     public void addColumn() {
@@ -110,7 +112,7 @@ public class OXOModel {
                     break;
                 }
             }
-            if (cellOccupied == false && cells.size() > 1) {
+            if (!cellOccupied && cells.size() > 1) {
                 cells.remove(numRows-1);
             }
         }
@@ -118,7 +120,6 @@ public class OXOModel {
 
 
     public void removeColumn() {
-
         if (!cells.isEmpty()) {
             int numRows = cells.size();
             int numCols = cells.get(0).size();
@@ -129,7 +130,7 @@ public class OXOModel {
                     break;
                 }
             }
-            if (cellOccupied == false && cells.get(0).size() > 1) {
+            if (!cellOccupied && cells.get(0).size() > 1) {
                 for (int i=0; i<numRows; i++) {
                     cells.get(i).remove(cells.get(i).size() -1);
                 }
@@ -149,8 +150,19 @@ public class OXOModel {
         return gameDrawn;
     }
 
-    public void setGameDraw(boolean drawStatus) {
-        this.gameDrawn = drawStatus;
+    public void setGameDrawn() {
+        gameDrawn = true;
     }
 
+    public void resetGameDrawnToFalse() {
+        gameDrawn = false;
+    }
+
+    public boolean getGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted (boolean isGameStarted) {
+        gameStarted = isGameStarted;
+    }
 }
