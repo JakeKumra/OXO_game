@@ -42,12 +42,11 @@ public class OXOController {
 
         if (gameModel.getWinner() == null) {
             gameModel.setCellOwner(rowIndex, colIndex, gameModel.getPlayerByNumber(current_player));
-
             gameModel.setCurrentPlayerNumber((gameModel.getCurrentPlayerNumber() + 1) % gameModel.getNumberOfPlayers());
-
                 // check for a win if not check for a draw if not continue
             if (hasWon(current_player)) {
                 System.out.println("We found a winner!");
+
             } else {
                 if (isDraw()) {
                     // update the game to be a draw
@@ -58,14 +57,10 @@ public class OXOController {
         }
     }
 
-    // needs updating to be dynamic for additional players
     private boolean isDraw() {
-
         boolean isDraw = true;
-
         int numRows = gameModel.getNumberOfRows();
         int numCols = gameModel.getNumberOfColumns();
-
         for (int r=0; r<numRows; r++) {
             for (int c=0; c<numCols; c++) {
                 if (gameModel.getCellOwner(r, c) == null) {
@@ -163,7 +158,6 @@ public class OXOController {
     }
 
     private boolean checkTopRightToBottomLeft(int numRows, int numCols, int winThreshold, OXOPlayer curr_player) {
-
         int minimumDimension = Math.min(numRows, numCols);
         for (int r=0; r<numRows; r++) {
             for (int c=0; c<numCols; c++) {

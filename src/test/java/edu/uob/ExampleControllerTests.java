@@ -29,33 +29,23 @@ class ExampleControllerTests {
     String timeoutComment = "Controller took too long to respond (probably stuck in an infinite loop)";
     assertTimeoutPreemptively(Duration.ofMillis(1000), () -> controller.handleIncomingCommand(command), timeoutComment);
   }
-
-  // Test simple move taking and cell claiming functionality
   @Test
   void testBasicMoveTaking() throws OXOMoveException {
-    // Find out which player is going to make the first move
     OXOPlayer firstMovingPlayer = model.getPlayerByNumber(model.getCurrentPlayerNumber());
-    // Make a move
     sendCommandToController("a1");
-    // Check that A1 (cell [0,0] on the board) is now "owned" by the first player
     String failedTestComment = "Cell a1 wasn't claimed by the first player";
     assertEquals(firstMovingPlayer, controller.gameModel.getCellOwner(0, 0), failedTestComment);
   }
 
-  // Test out basic win detection
   @Test
   void testBasicWin() throws OXOMoveException {
-    // Find out which player is going to make the first move (they should be the eventual winner)
     OXOPlayer firstMovingPlayer = model.getPlayerByNumber(model.getCurrentPlayerNumber());
-    // Make a bunch of moves for the two players
     sendCommandToController("a1"); // First player
     sendCommandToController("b1"); // Second player
     sendCommandToController("a2"); // First player
     sendCommandToController("b2"); // Second player
     sendCommandToController("a3"); // First player
 
-    // a1, a2, a3 should be a win for the first player (since players alternate between moves)
-    // Let's check to see whether the first moving player is indeed the winner
     String failedTestComment = "Winner was expected to be " + firstMovingPlayer.getPlayingLetter() + " but wasn't";
     assertEquals(firstMovingPlayer, model.getWinner(), failedTestComment);
   }
@@ -154,163 +144,158 @@ class ExampleControllerTests {
     sendCommandToController("b3"); // Second player
     sendCommandToController("c3"); // First player
 
-    // The game should be a tie
     String failedTestComment = "Was expecting a draw so winner should be null";
     assertEquals(model.getWinner(), null, failedTestComment);
   }
 
   @Test
-  void testResetGame() throws OXOMoveException {
-    // test the game resets correctly
-    // call the RESET METHOD DIRECTLY
-  }
-
-  // Example of how to test for the throwing of exceptions
-  @Test
   void testInvalidIdentifierException() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierLengthException for command `abc123`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierLengthException.class, () -> sendCommandToController("abc123"), failedTestComment);
   }
 
   @Test
   void testInvalidIdentifierException2() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierLengthException for command `a`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierLengthException.class, () -> sendCommandToController("a"), failedTestComment);
   }
 
   @Test
   void testInvalidIdentifierException3() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierLengthException for command ``";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierLengthException.class, () -> sendCommandToController(""), failedTestComment);
   }
 
   @Test
   void InvalidIdentifierCharacterException() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command `22`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController("22"), failedTestComment);
   }
 
   @Test
   void InvalidIdentifierCharacterException2() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command `!2`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController("!2"), failedTestComment);
   }
 
   @Test
   void InvalidIdentifierCharacterException3() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command ` 2`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController(" 2"), failedTestComment);
   }
 
   @Test
   void InvalidIdentifierCharacterException4() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command `aa`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController("aa"), failedTestComment);
   }
 
   @Test
   void InvalidIdentifierCharacterException5() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command `a@`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController("a@"), failedTestComment);
   }
 
   @Test
   void InvalidIdentifierCharacterException6() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an InvalidIdentifierCharacterException for command `a `";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(InvalidIdentifierCharacterException.class, () -> sendCommandToController("a "), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `d1`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("d1"), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException1() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `z1`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("z1"), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException2() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `i1`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("i1"), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException3() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `h1`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("h1"), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException4() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `a4`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("a4"), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException5() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `a4`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("a0"), failedTestComment);
   }
 
   @Test
   void OutsideCellRangeException6() throws OXOMoveException {
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an OutsideCellRangeException for command `a4`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(OutsideCellRangeException.class, () -> sendCommandToController("a9"), failedTestComment);
   }
 
   @Test
   void CellAlreadyTakenException() throws OXOMoveException {
     sendCommandToController("a1"); // First player
-    // Check that the controller throws a suitable exception when it gets an invalid command
     String failedTestComment = "Controller failed to throw an CellAlreadyTakenException for command `a1`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(CellAlreadyTakenException.class, () -> sendCommandToController("a1"), failedTestComment);
   }
 
   @Test
   void CellAlreadyTakenException2() throws OXOMoveException {
-    sendCommandToController("c3"); // First player
-    // Check that the controller throws a suitable exception when it gets an invalid command
+    sendCommandToController("c3");
     String failedTestComment = "Controller failed to throw an CellAlreadyTakenException for command `c3`";
-    // The next line is a bit ugly, but it is the easiest way to test exceptions (soz)
     assertThrows(CellAlreadyTakenException.class, () -> sendCommandToController("c3"), failedTestComment);
   }
+
+  @Test
+  void TestUnableToMoveAfterGameWon() throws OXOMoveException {
+
+    sendCommandToController("a1"); // First player
+    sendCommandToController("b1"); // Second player
+    sendCommandToController("a2"); // First player
+    sendCommandToController("b2"); // Second player
+    sendCommandToController("a3"); // First player
+    sendCommandToController("c1"); // Second player
+
+    String failedTestComment = "c1 should not be occupied by second player after game was won`";
+    assertEquals(controller.gameModel.getCellOwner(2, 0), null, failedTestComment);
+  }
+
+  @Test
+  void testResetMidGame() throws OXOMoveException {
+
+    sendCommandToController("a1"); // First player
+    sendCommandToController("b1"); // Second player
+    sendCommandToController("a2"); // First player
+    sendCommandToController("b2"); // Second player
+
+    // check the draw, win, states here.
+    // then call reset method
+    // then check again that they were reset correctly
+  }
+  @Test
+  void testResetPostWin() throws OXOMoveException {
+
+    sendCommandToController("a1"); // First player
+    sendCommandToController("b1"); // Second player
+    sendCommandToController("a2"); // First player
+    sendCommandToController("b2"); // Second player
+
+    // test the game resets correctly
+    // call the RESET METHOD DIRECTLY
+  }
+
 
 }
 
