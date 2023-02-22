@@ -52,10 +52,10 @@ class TestsForFourPlayers9x9 {
         sendCommandToController("c2"); // fourth player move 'B' [2][1]
         sendCommandToController("c3"); // first player move 'A' [2][2]
 
-        OXOPlayer firstPlayer = controller.gameModel.getPlayerByIndex(0);
-        OXOPlayer secondPlayer = controller.gameModel.getPlayerByIndex(1);
-        OXOPlayer thirdPlayer = controller.gameModel.getPlayerByIndex(2);
-        OXOPlayer fourthPlayer = controller.gameModel.getPlayerByIndex(3);
+        OXOPlayer firstPlayer = controller.gameModel.getPlayerByNumber(0);
+        OXOPlayer secondPlayer = controller.gameModel.getPlayerByNumber(1);
+        OXOPlayer thirdPlayer = controller.gameModel.getPlayerByNumber(2);
+        OXOPlayer fourthPlayer = controller.gameModel.getPlayerByNumber(3);
 
         // Check that A1 (cell [0,0] on the board) is now "owned" by the first player
         String failedTestComment = "Cell a1 wasn't claimed by the first player";

@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class OXOModel {
 
-    private final ArrayList< ArrayList<OXOPlayer> > cells;
+    private ArrayList< ArrayList<OXOPlayer> > cells;
 
-    private final ArrayList<OXOPlayer> players;
+    private ArrayList<OXOPlayer> players;
 
     private int currentPlayerNumber;
 
@@ -30,9 +30,9 @@ public class OXOModel {
         players = new ArrayList<>(2);
     }
 
-    public OXOPlayer getPlayerByIndex (int indexNum) {
-        if (players.size() >= indexNum - 1) {
-            return players.get(indexNum);
+    public OXOPlayer getPlayerByNumber(int number) {
+        if (players.size() >= number - 1) {
+            return players.get(number);
         }
         return null;
     }
@@ -43,10 +43,6 @@ public class OXOModel {
 
     public void addPlayer(OXOPlayer player) {
         players.add(player);
-    }
-
-    public OXOPlayer getPlayerByNumber(int number) {
-        return players.get(number);
     }
 
     public OXOPlayer getWinner() {

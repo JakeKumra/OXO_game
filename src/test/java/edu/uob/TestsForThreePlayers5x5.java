@@ -50,9 +50,9 @@ class TestsForThreePlayers5x5 {
         sendCommandToController("c1"); // second player move 'B'
         sendCommandToController("c3"); // third player move 'A'
 
-        OXOPlayer firstPlayer = controller.gameModel.getPlayerByIndex(0);
-        OXOPlayer secondPlayer = controller.gameModel.getPlayerByIndex(1);
-        OXOPlayer thirdPlayer = controller.gameModel.getPlayerByIndex(2);
+        OXOPlayer firstPlayer = controller.gameModel.getPlayerByNumber(0);
+        OXOPlayer secondPlayer = controller.gameModel.getPlayerByNumber(1);
+        OXOPlayer thirdPlayer = controller.gameModel.getPlayerByNumber(2);
 
         String failedTestComment = "Cell a1 wasn't claimed by the first player";
         assertEquals(firstPlayer, controller.gameModel.getCellOwner(0, 0), failedTestComment);
